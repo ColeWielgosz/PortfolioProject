@@ -1,0 +1,43 @@
+#include <Adafruit_NeoPixel.h>
+#ifdef __AVR__
+#include <avr/power.h>
+#endif
+
+#define PIN            2
+#define numP      8
+
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(numP, PIN, NEO_GRB + NEO_KHZ800);
+//from adafruit neopixel examples in neopixel library
+
+int delayval = 5; // delay for half a second
+
+const int buzzer = 6;
+const int lightSensor = 9;
+
+void setup() {
+  pinMode(lightSensor, INPUT);
+  pinMode(buzzer, OUTPUT);
+  Serial.begin(9600);
+  pixels.begin();
+}
+
+void loop() {
+  Serial.println(analogRead(lightSensor));
+
+     if(analogRead(lightSensor) > 820){
+        for(int i=0;i<numP;i++){
+          pixels.setBrightness(100);
+          pixels.setPixelColor(i, pixels.Color(150,0,0));
+          pixels.show();
+          digitalWrite(buzzer, HIGH);
+          }
+     }else{
+        for(int i=0;i<numP;i++){
+          pixels.setBrightness(1);
+          pixels.setPixelColor(i, pixels.Color(0,0,0));
+          pixels.show();
+          digitalWrite(buzzer, LOW);
+          }
+  }
+  
+}
